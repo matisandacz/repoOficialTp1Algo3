@@ -44,7 +44,7 @@ int FB2(int possibleShopToOpen, int accumulatedRisk)
 {
 	if(possibleShopToOpen>=NumberOfShops){
 		if(accumulatedRisk < 0){
-			return -999999999;
+			return -999999;
 		}else{
 			return NoBenefit;
 		}
@@ -92,22 +92,17 @@ int BT(int possibleShopToOpen, int accumulatedRisk,int partialBenefit)
 	if (poda_factibilidad)
 	{
 		//if(accumulatedRisk + MinPossibleRisk[possibleShopToOpen] > RiskLimit) return NoBenefit;
-		if(accumulatedRisk > RiskLimit) return NoBenefit;
+		if(accumulatedRisk > RiskLimit) return -999999;
 	}
 	//poda de optimalidad
 	if (poda_optimalidad)
 	{
 		if (partialBenefit + MaxPossibleBenefits[possibleShopToOpen] <= CurrentMaxBenefit) return NoBenefit;
-	}
-	
-	if (accumulatedRisk + Shops[possibleShopToOpen][risk_index] <= RiskLimit)
-	{
-		int int1 = BT(possibleShopToOpen + 2, accumulatedRisk + Shops[possibleShopToOpen][risk_index],partialBenefit + Shops[possibleShopToOpen][benefit_index]) + Shops[possibleShopToOpen][benefit_index];
-		int int2 = BT(possibleShopToOpen + 1,accumulatedRisk,partialBenefit);
-		return max(int1,int2);
-	} else {
-		return BT(possibleShopToOpen + 1,accumulatedRisk,partialBenefit);
-	}
+	}	
+	int openShop = BT(possibleShopToOpen + 2, accumulatedRisk + Shops[possibleShopToOpen][risk_index],partialBenefit + Shops[possibleShopToOpen][benefit_index]) + Shops[possibleShopToOpen][benefit_index];
+	int closedShop = BT(possibleShopToOpen + 1,accumulatedRisk,partialBenefit);
+	return max(openShop,closedShop);
+
 	
 }
 
@@ -181,7 +176,6 @@ int main(int argc, char** argv)
 		CurrentMaxBenefit = NoBenefit;
 		poda_optimalidad = poda_factibilidad = true;
 		precalculateMaxBenefits();
-		precalculateMinRisks();
 		optimum = BT(0,0,0);
 	}
 	else if (algoritmo == "BT-F")
@@ -189,7 +183,6 @@ int main(int argc, char** argv)
 		CurrentMaxBenefit = NoBenefit;
 		poda_optimalidad = false;
 		poda_factibilidad = true;
-		precalculateMinRisks();
 		optimum = BT(0, 0, 0);
 	}
 	else if (algoritmo == "BT-O")
