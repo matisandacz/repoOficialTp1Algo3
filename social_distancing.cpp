@@ -25,32 +25,17 @@ vector<vector<int>> Shops; // Asumo que Shops[0] y Shops[1] representan benefici
 // possibleShopToOpen: Indice del elemento que estoy analizando.
 // accumulatedRisk: Riesgo acumulado hasta ahora.
 
+
 int FB(int possibleShopToOpen, int accumulatedRisk)
 {
-	if (possibleShopToOpen >= NumberOfShops) return NoBenefit;
-	if (accumulatedRisk + Shops[possibleShopToOpen][risk_index] <= RiskLimit)
-	{
-		return max(FB(possibleShopToOpen + 2, accumulatedRisk + Shops[possibleShopToOpen][risk_index]) + Shops[possibleShopToOpen][benefit_index],FB(possibleShopToOpen + 1,accumulatedRisk));
-	} else {
-		return FB(possibleShopToOpen + 1,accumulatedRisk);
-	}
-}
-
-
-// Posibilidad de cambio en el codigo.
-// Caso base, si el riesgo es negativo, riskLim = -inf.
-// Esto asegura completar cada una de las ramas.
-int FB2(int possibleShopToOpen, int accumulatedRisk)
-{
 	if(possibleShopToOpen>=NumberOfShops){
-		if(accumulatedRisk < 0){
-			return -999999;
+		if(accumulatedRisk > RiskLimit){
+			return -1;
 		}else{
 			return NoBenefit;
 		}
 	}
-
-	return max(FB2(possibleShopToOpen + 2, accumulatedRisk + Shops[possibleShopToOpen][risk_index]) + Shops[possibleShopToOpen][benefit_index],FB2(possibleShopToOpen + 1,accumulatedRisk));
+	return max(FB(possibleShopToOpen + 2, accumulatedRisk + Shops[possibleShopToOpen][risk_index]) + Shops[possibleShopToOpen][benefit_index],FB(possibleShopToOpen + 1,accumulatedRisk));
 
 }
 
@@ -85,6 +70,7 @@ void precalculateMinRisks(){
 int BT(int possibleShopToOpen, int accumulatedRisk,int partialBenefit)
 {
 	if (possibleShopToOpen >= NumberOfShops){
+		if (accumulatedRisk > RiskLimit) return -1; 
 		if (partialBenefit > CurrentMaxBenefit) CurrentMaxBenefit = partialBenefit;
 		return NoBenefit;
 	} 
@@ -92,7 +78,7 @@ int BT(int possibleShopToOpen, int accumulatedRisk,int partialBenefit)
 	if (poda_factibilidad)
 	{
 		//if(accumulatedRisk + MinPossibleRisk[possibleShopToOpen] > RiskLimit) return NoBenefit;
-		if(accumulatedRisk > RiskLimit) return -999999;
+		if(accumulatedRisk > RiskLimit) return -1;
 	}
 	//poda de optimalidad
 	if (poda_optimalidad)
@@ -169,7 +155,7 @@ int main(int argc, char** argv)
 	auto start = chrono::steady_clock::now();
 	if (algoritmo == "FB")
 	{
-		optimum = FB2(0, 0);
+		optimum = FB(0, 0);
 	}
 	else if (algoritmo == "BT")
 	{
