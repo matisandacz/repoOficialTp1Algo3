@@ -79,7 +79,7 @@ int BT(int possibleShopToOpen, int accumulatedRisk,int partialBenefit)
 	if (poda_factibilidad)
 	{
 		//if(accumulatedRisk + MinPossibleRisk[possibleShopToOpen] > RiskLimit) return NoBenefit;
-		if(accumulatedRisk > RiskLimit) return -1;
+		if(accumulatedRisk > RiskLimit) return M_INFTY;
 	}
 	//poda de optimalidad
 	if (poda_optimalidad)
