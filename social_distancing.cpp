@@ -30,7 +30,7 @@ int FB(int possibleShopToOpen, int accumulatedRisk)
 {
 	if(possibleShopToOpen>=NumberOfShops){
 		if(accumulatedRisk > RiskLimit){
-			return -1;
+			return -999999;
 		}else{
 			return NoBenefit;
 		}
