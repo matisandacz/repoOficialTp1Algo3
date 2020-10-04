@@ -17,6 +17,7 @@ int NoBenefit = 0; // Valor para indicar que no hay beneficio. POR QUE SE USA ES
 //Shops[1] = Risks.
 int benefit_index = 0;
 int risk_index = 1;
+int M_INFTY = std::numeric_limits<int>::min();
 
 // Información de la instancia a resolver.
 int NumberOfShops, RiskLimit; // Cantidad de tienas y el RiskLimit maximo de contagios.
@@ -30,7 +31,7 @@ int FB(int possibleShopToOpen, int accumulatedRisk)
 {
 	if(possibleShopToOpen>=NumberOfShops){
 		if(accumulatedRisk > RiskLimit){
-			return -999999;
+			return M_INFTY;
 		}else{
 			return NoBenefit;
 		}
@@ -70,7 +71,7 @@ void precalculateMinRisks(){
 int BT(int possibleShopToOpen, int accumulatedRisk,int partialBenefit)
 {
 	if (possibleShopToOpen >= NumberOfShops){
-		if (accumulatedRisk > RiskLimit) return -1; 
+		if (accumulatedRisk > RiskLimit) return M_INFTY; 
 		if (partialBenefit > CurrentMaxBenefit) CurrentMaxBenefit = partialBenefit;
 		return NoBenefit;
 	} 
